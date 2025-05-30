@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 import Link from 'next/link';
 import DisplaytechIcons from './DisplaytechIcons';
 
-const InterviewCard = ({ interviewId, userId, role, type, teckstack, createdAt }: InterviewCardProps) => {
+const InterviewCard = ({ interviewId, userId, role, type, techstack, createdAt }: InterviewCardProps) => {
   
   const feedback = null as Feedback | null;
   const normalizedType = /mix/gi.test(type) ? 'Mixed' : type;
@@ -35,9 +35,9 @@ const InterviewCard = ({ interviewId, userId, role, type, teckstack, createdAt }
           <p className="line-clamp-2 mt-5">{feedback?.finalAssessment || "You haven't taken any interview yet. Take an intervirew to improve your skills."}</p>
         </div>
         <div className="fled flex-row justify-between">
-          <DisplaytechIcons techStack={teckstack} />
+          <DisplaytechIcons techStack={techstack} />
           <Button className="btn-primary">
-            <Link href={feedback?`interview/${interviewId}/feedback`: `/interview/${interviewId}`}>
+            <Link href={feedback?`/interview/${interviewId}/feedback`: `/interview/${interviewId}`}>
             {feedback? 'Check Feedback': 'View Interview'}
             </Link>
           </Button>
