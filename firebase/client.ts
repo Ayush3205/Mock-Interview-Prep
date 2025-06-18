@@ -16,5 +16,3 @@ const app = !getApps.length ? initializeApp(firebaseConfig): getApp();
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-
-// 1:32:14
