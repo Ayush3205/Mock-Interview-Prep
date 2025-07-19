@@ -3,10 +3,18 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { Button } from "./ui/button";
+<<<<<<< HEAD
 import DisplayTechIcons from "./DisplaytechIcons";
 
 import { cn, getRandomInterviewCover } from "@/lib/utils";
 import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
+=======
+
+
+import { cn, getRandomInterviewCover } from "@/lib/utils";
+import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
+import DisplayTechIcons from "./DisplayTechIcons";
+>>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913
 
 const InterviewCard = async ({
   interviewId,
@@ -108,4 +116,8 @@ const InterviewCard = async ({
   );
 };
 
+<<<<<<< HEAD
 export default InterviewCard;
+=======
+export default InterviewCard;
+>>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913

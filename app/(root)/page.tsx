@@ -91,4 +91,8 @@ async function Home() {
   );
 }
 
+<<<<<<< HEAD
 export default Home;
+=======
+export default Home;
+>>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913

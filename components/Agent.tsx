@@ -220,4 +220,8 @@ const Agent = ({
   );
 };
 
+<<<<<<< HEAD
 export default Agent;
+=======
+export default Agent;
+>>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913

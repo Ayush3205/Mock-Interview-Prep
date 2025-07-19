@@ -122,4 +122,8 @@ export async function getInterviewsByUserId(
     id: doc.id,
     ...doc.data(),
   })) as Interview[];
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913

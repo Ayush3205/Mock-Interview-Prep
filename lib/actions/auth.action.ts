@@ -129,4 +129,8 @@ export async function getCurrentUser(): Promise<User | null> {
 export async function isAuthenticated() {
   const user = await getCurrentUser();
   return !!user;
+<<<<<<< HEAD:lib/actions/auth.action.tsx
 }
+=======
+}
+>>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913:lib/actions/auth.action.ts
