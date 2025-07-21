@@ -3,18 +3,19 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { Button } from "./ui/button";
-<<<<<<< HEAD
 import DisplayTechIcons from "./DisplaytechIcons";
 
 import { cn, getRandomInterviewCover } from "@/lib/utils";
 import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
-=======
 
-
-import { cn, getRandomInterviewCover } from "@/lib/utils";
-import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
-import DisplayTechIcons from "./DisplayTechIcons";
->>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913
+interface InterviewCardProps {
+  interviewId: string;
+  userId?: string;
+  role: string;
+  type: string;
+  techstack: string[];
+  createdAt: string;
+}
 
 const InterviewCard = async ({
   interviewId,
@@ -56,7 +57,7 @@ const InterviewCard = async ({
               badgeColor
             )}
           >
-            <p className="badge-text ">{normalizedType}</p>
+            <p className="badge-text">{normalizedType}</p>
           </div>
 
           {/* Cover Image */}
@@ -65,7 +66,7 @@ const InterviewCard = async ({
             alt="cover-image"
             width={90}
             height={90}
-            className="rounded-full object-fit size-[90px]"
+            className="rounded-full object-cover size-[90px]"
           />
 
           {/* Interview Role */}
@@ -116,8 +117,4 @@ const InterviewCard = async ({
   );
 };
 
-<<<<<<< HEAD
 export default InterviewCard;
-=======
-export default InterviewCard;
->>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913

@@ -9,11 +9,7 @@ import {
   getInterviewById,
 } from "@/lib/actions/general.action";
 import { getCurrentUser } from "@/lib/actions/auth.action";
-<<<<<<< HEAD
 import DisplayTechIcons from "@/components/DisplaytechIcons";
-=======
-import DisplayTechIcons from "@/components/DisplayTechIcons";
->>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913
 
 const InterviewDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -63,8 +59,4 @@ const InterviewDetails = async ({ params }: RouteParams) => {
   );
 };
 
-<<<<<<< HEAD
 export default InterviewDetails;
-=======
-export default InterviewDetails;
->>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913

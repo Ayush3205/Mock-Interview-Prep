@@ -21,6 +21,22 @@ interface SavedMessage {
   content: string;
 }
 
+interface AgentProps {
+  userName?: string;
+  userId?: string;
+  interviewId?: string;
+  feedbackId?: string;
+  type: "interview" | "generate";
+  questions?: string[];
+}
+
+interface Message {
+  type: string;
+  transcriptType?: string;
+  role: "user" | "system" | "assistant";
+  transcript: string;
+}
+
 const Agent = ({
   userName,
   userId,
@@ -220,8 +236,4 @@ const Agent = ({
   );
 };
 
-<<<<<<< HEAD
 export default Agent;
-=======
-export default Agent;
->>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913

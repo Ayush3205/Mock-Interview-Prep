@@ -10,19 +10,20 @@ import {
   getLatestInterviews,
 } from "@/lib/actions/general.action";
 
-async function Home() {
+export default async function Home() {
   const user = await getCurrentUser();
 
-  const [userInterviews, allInterview] = await Promise.all([
+  const [userInterviews, allInterviews] = await Promise.all([
     getInterviewsByUserId(user?.id!),
     getLatestInterviews({ userId: user?.id! }),
   ]);
 
-  const hasPastInterviews = userInterviews?.length! > 0;
-  const hasUpcomingInterviews = allInterview?.length! > 0;
+  const hasPastInterviews = userInterviews && userInterviews.length > 0;
+  const hasUpcomingInterviews = allInterviews && allInterviews.length > 0;
 
   return (
     <>
+      {/* Hero Section */}
       <section className="card-cta">
         <div className="flex flex-col gap-6 max-w-lg">
           <h2>Get Interview-Ready with AI-Powered Practice & Feedback</h2>
@@ -44,12 +45,13 @@ async function Home() {
         />
       </section>
 
+      {/* User's Interviews */}
       <section className="flex flex-col gap-6 mt-8">
         <h2>Your Interviews</h2>
 
         <div className="interviews-section">
           {hasPastInterviews ? (
-            userInterviews?.map((interview) => (
+            userInterviews.map((interview) => (
               <InterviewCard
                 key={interview.id}
                 userId={user?.id}
@@ -66,12 +68,13 @@ async function Home() {
         </div>
       </section>
 
+      {/* Explore More Interviews */}
       <section className="flex flex-col gap-6 mt-8">
         <h2>Take Interviews</h2>
 
         <div className="interviews-section">
           {hasUpcomingInterviews ? (
-            allInterview?.map((interview) => (
+            allInterviews.map((interview) => (
               <InterviewCard
                 key={interview.id}
                 userId={user?.id}
@@ -90,9 +93,3 @@ async function Home() {
     </>
   );
 }
-
-<<<<<<< HEAD
-export default Home;
-=======
-export default Home;
->>>>>>> 30c88d4406bf086a6318d5697bc1bed5bb568913
