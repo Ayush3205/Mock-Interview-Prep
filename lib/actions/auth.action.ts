@@ -26,7 +26,7 @@ export async function setSessionCookie(idToken: string) {
 }
 
 export async function signUp(params: SignUpParams) {
-  const { uid, name, email } = params;
+  const { uid, name, email, profileURL } = params;
 
   try {
     // check if user exists in db
@@ -41,23 +41,26 @@ export async function signUp(params: SignUpParams) {
     await db.collection("users").doc(uid).set({
       name,
       email,
-      // profileURL,
-      // resumeURL,
+      profileURL: profileURL || null,
+      resumeURL: null,
+      createdAt: new Date().toISOString(),
     });
 
     return {
       success: true,
       message: "Account created successfully. Please sign in.",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error creating user:", error);
 
     // Handle Firebase specific errors
-    if (error.code === "auth/email-already-exists") {
-      return {
-        success: false,
-        message: "This email is already in use",
-      };
+    if (error && typeof error === 'object' && 'code' in error) {
+      if (error.code === "auth/email-already-exists") {
+        return {
+          success: false,
+          message: "This email is already in use",
+        };
+      }
     }
 
     return {
@@ -79,8 +82,13 @@ export async function signIn(params: SignInParams) {
       };
 
     await setSessionCookie(idToken);
-  } catch (error: any) {
-    console.log("");
+    
+    return {
+      success: true,
+      message: "Successfully signed in.",
+    };
+  } catch (error: unknown) {
+    console.error("Error signing in:", error);
 
     return {
       success: false,
@@ -117,8 +125,8 @@ export async function getCurrentUser(): Promise<User | null> {
       ...userRecord.data(),
       id: userRecord.id,
     } as User;
-  } catch (error) {
-    console.log(error);
+  } catch (error: unknown) {
+    console.error("Error getting current user:", error);
 
     // Invalid or expired session
     return null;
@@ -129,4 +137,42 @@ export async function getCurrentUser(): Promise<User | null> {
 export async function isAuthenticated() {
   const user = await getCurrentUser();
   return !!user;
+}
+
+// Updated function without 'any' type
+export async function updateUserProfile(params: {
+  userId: string;
+  profileURL?: string;
+  name?: string;
+}) {
+  const { userId, profileURL, name } = params;
+
+  try {
+    // Use proper typing instead of 'any'
+    const updateData: Partial<{
+      profileURL: string | null;
+      name: string;
+      updatedAt: string;
+    }> = {};
+    
+    if (profileURL !== undefined) updateData.profileURL = profileURL;
+    if (name !== undefined) updateData.name = name;
+    
+    // Add updated timestamp
+    updateData.updatedAt = new Date().toISOString();
+
+    await db.collection("users").doc(userId).update(updateData);
+
+    return {
+      success: true,
+      message: "Profile updated successfully.",
+    };
+  } catch (error: unknown) {
+    console.error("Error updating user profile:", error);
+
+    return {
+      success: false,
+      message: "Failed to update profile. Please try again.",
+    };
+  }
 }

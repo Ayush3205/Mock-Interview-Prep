@@ -32,10 +32,14 @@ interface CreateFeedbackParams {
   feedbackId?: string;
 }
 
+// Updated User interface
 interface User {
   name: string;
   email: string;
   id: string;
+  profileURL?: string; 
+  resumeURL?: string;  
+  createdAt?: string;  
 }
 
 interface InterviewCardProps {
@@ -47,9 +51,11 @@ interface InterviewCardProps {
   createdAt?: string;
 }
 
+// Updated AgentProps interface
 interface AgentProps {
   userName: string;
   userId?: string;
+  userProfileImage?: string;
   interviewId?: string;
   feedbackId?: string;
   type: "generate" | "interview";
@@ -76,11 +82,13 @@ interface SignInParams {
   idToken: string;
 }
 
+// Updated SignUpParams interface
 interface SignUpParams {
   uid: string;
   name: string;
   email: string;
   password: string;
+  profileURL?: string;
 }
 
 type FormType = "sign-in" | "sign-up";

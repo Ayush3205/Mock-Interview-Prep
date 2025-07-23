@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
 import { interviewer } from "@/constants";
 import { createFeedback } from "@/lib/actions/general.action";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -24,10 +25,12 @@ interface SavedMessage {
 interface AgentProps {
   userName?: string;
   userId?: string;
+  userProfileImage?: string;
   interviewId?: string;
   feedbackId?: string;
   type: "interview" | "generate";
   questions?: string[];
+  assistantId?: string[]
 }
 
 interface Message {
@@ -40,16 +43,20 @@ interface Message {
 const Agent = ({
   userName,
   userId,
+  userProfileImage, 
   interviewId,
   feedbackId,
   type,
   questions,
+  assistantId,
 }: AgentProps) => {
   const router = useRouter();
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastMessage, setLastMessage] = useState<string>("");
+
+  // ... (keep all your existing useEffect hooks and functions unchanged)
 
   useEffect(() => {
     const onCallStart = () => {
@@ -128,33 +135,36 @@ const Agent = ({
         handleGenerateFeedback(messages);
       }
     }
-  }, [messages, callStatus, feedbackId, interviewId, router, type, userId]);
+  }, [messages, callStatus, feedbackId, interviewId, router, type, userId, assistantId]);
 
   const handleCall = async () => {
-    setCallStatus(CallStatus.CONNECTING);
-
-    if (type === "generate") {
-      await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
-        variableValues: {
-          username: userName,
-          userid: userId,
-        },
-      });
-    } else {
-      let formattedQuestions = "";
-      if (questions) {
-        formattedQuestions = questions
-          .map((question) => `- ${question}`)
-          .join("\n");
-      }
-
-      await vapi.start(interviewer, {
-        variableValues: {
-          questions: formattedQuestions,
-        },
-      });
+  setCallStatus(CallStatus.CONNECTING);
+  console.log("cs", callStatus);
+  
+  if (type === "generate") {
+    const result = await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID, {
+      variableValues: {
+        username: userName,
+        userid: userId,
+      },
+    });
+    console.log("result", result);
+  } else {
+    let formattedQuestions = "";
+    if (questions) {
+      formattedQuestions = questions
+        .map((question) => `- ${question}`)
+        .join("\n");
     }
-  };
+
+    await vapi.start(interviewer, {
+      variableValues: {
+        questions: formattedQuestions,
+      },
+    });
+  }
+};
+
 
   const handleDisconnect = () => {
     setCallStatus(CallStatus.FINISHED);
@@ -175,20 +185,23 @@ const Agent = ({
               className="object-cover"
             />
             {isSpeaking && <span className="animate-speak" />}
-          </div>
+          </div> 
           <h3>AI Interviewer</h3>
         </div>
 
-        {/* User Profile Card */}
+        {/* User Profile Card - Updated with Avatar */}
         <div className="card-border">
           <div className="card-content">
-            <Image
-              src="/user-avatar.png"
-              alt="profile-image"
-              width={539}
-              height={539}
-              className="rounded-full object-cover size-[120px]"
-            />
+            <Avatar className="w-[120px] h-[120px] border-2 border-gray-300">
+              <AvatarImage 
+                src={userProfileImage} 
+                alt={userName} 
+                className="object-cover"
+              />
+              <AvatarFallback className="text-4xl font-semibold bg-primary/10 text-primary">
+                {userName?.charAt(0).toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar>
             <h3>{userName}</h3>
           </div>
         </div>
