@@ -90,36 +90,76 @@ export async function getFeedbackByInterviewId(
   return { id: feedbackDoc.id, ...feedbackDoc.data() } as Feedback;
 }
 
-export async function getLatestInterviews(
-  params: GetLatestInterviewsParams
-): Promise<Interview[] | null> {
-  const { userId, limit = 20 } = params;
+// export async function getLatestInterviews(
 
-  const interviews = await db
-    .collection("interviews")
-    .orderBy("createdAt", "desc")
-    .where("finalized", "==", true)
-    .where("userId", "!=", userId)
-    .limit(limit)
-    .get();
+//   params: GetLatestInterviewsParams
+// ): Promise<Interview[] | null> {
+//   const { userId, limit = 20 } = params;
 
-  return interviews.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as Interview[];
-}
+//   const interviews = await db
+//     .collection("interviews")
+//     .orderBy("createdAt", "desc")
+//     .where("finalized", "==", true)
+//     .where("userId", "!=", userId)
+//     .limit(limit)
+//     .get();
+
+//   return interviews.docs.map((doc) => ({
+//     id: doc.id,
+//     ...doc.data(),
+//   })) as Interview[];
+// }
+
+// export async function getInterviewsByUserId(
+//   userId: string
+// ): Promise<Interview[] | null> {
+
+//   const interviews = await db
+//     .collection("interviews")
+//     .where("userId", "==", userId)
+//     .orderBy("createdAt", "desc")
+//     .get();
+
+//   return interviews.docs.map((doc) => ({
+//     id: doc.id,
+//     ...doc.data(),
+//   })) as Interview[];
+// }
+
+
+
+// return empty if no user
+
 
 export async function getInterviewsByUserId(
-  userId: string
-): Promise<Interview[] | null> {
-  const interviews = await db
+  userId?: string
+): Promise<Interview[]> {
+  if (!userId) return [];
+
+  const snapshot = await db
     .collection("interviews")
     .where("userId", "==", userId)
     .orderBy("createdAt", "desc")
     .get();
 
-  return interviews.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as Interview[];
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as Interview[];
+}
+
+export async function getLatestInterviews(
+  params: GetLatestInterviewsParams
+): Promise<Interview[]> {
+  const { userId, limit = 20 } = params;
+
+  let query = db
+    .collection("interviews")
+    .where("finalized", "==", true)
+    .orderBy("createdAt", "desc")
+    .limit(limit);
+
+  // only add the inequality filter if we actually have a userId
+  if (userId) query = query.where("userId", "!=", userId);
+
+  const snapshot = await query.get();
+
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as Interview[];
 }
